@@ -18,5 +18,5 @@ Based on the measured water level, the pump operation is controlled automaticall
 ## Simulation and Output
 The system provides real-time feedback by printing the current water level and pump status to the console. Adjusting the potentiometer simulates changes in water level, allowing easy observation of pump behavior during testing.
 
-
+## circuit design
 <img width="735" height="494" alt="image" src="https://github.com/user-attachments/assets/ca35723a-9b5a-44d8-8b83-530722cea55d" />
