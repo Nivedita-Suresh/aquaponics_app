@@ -25,6 +25,11 @@ The system provides real-time feedback by printing the current water level and p
 
 
 
+
+
+
+
+
 # **pH Monitoring Module** 
 
 **Author:** Navya VK
@@ -55,6 +60,8 @@ The **LED** blinks to indicate abnormal pH conditions and remains**OFF** when th
 The system provides real-time feedback by displaying the current pH value and its corresponding status (Normal, Acidic, or Alkaline) on the serial console. Adjusting the potentiometer simulates changes in water pH, enabling easy observation of system response and alert indication during testing and demonstration.
 
 ## Circuit Design
+<img width="735" height="494" alt="pH Monitoring Circuit Design" src="https://github.com/user-attachments/assets/ca35723a-9b5a-44d8-8b83-530722cea55d" />..
+
 
 
 
