@@ -66,7 +66,8 @@ The system provides real-time feedback by displaying the current pH value and it
 
 
 
-## Water Temperature Monitoring & Alert Module  
+# **Water Temperature Monitoring & Alert Module**
+
 **Author:** Nikhil H  
 
 ---
@@ -115,7 +116,8 @@ The module is simulated using **Wokwi** with **MicroPython**. Within the simulat
 ### Circuit Design  
 <img width="735" height="494" alt="Screenshot 2026-02-07 164303" src="https://github.com/user-attachments/assets/c642e0e2-8c6f-438f-86a3-2d345c7f8cc8" />
 
-## Pump Logic
+# ** Pump Logic**
+
 **Author:** Nivedita Suresh
 
 ### Overview
@@ -150,5 +152,12 @@ Advanced aquaponics systems often use multiple pumps, solenoid valves, and close
 ### Summary
 The pump logic prioritizes **simplicity, reliability, and energy efficiency**. By using a single continuously operating pump and gravity-assisted drainage, the system achieves effective water circulation without unnecessary complexity. Sensor data is leveraged for monitoring and alerts rather than direct actuation, making the design well-suited for small-scale aquaponics applications and future scalability.
 
+# **Integrated Water Monitoring Module**
+
+The individual modules for water temperature, pH level, and water level monitoring were successfully integrated into a single program running on the Raspberry Pi. This integration allows all sensor data to be collected and processed together, ensuring synchronized readings and simpler system management.
+
+The combined module displays water temperature, pH value, water level condition, and overall system status through a serial/terminal output. This confirms correct sensor operation and system stability after integration.
+
+As a next stage, the integrated sensor data will be sent to a mobile application for real-time remote monitoring. This will enable users to track water temperature, pH level, and water level directly from their phones, forming the basis for future IoT-based control and alert features.
 
 
