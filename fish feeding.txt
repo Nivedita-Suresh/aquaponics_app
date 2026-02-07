@@ -1,0 +1,102 @@
+
+ Basic Logic of Automatic Fish Feeding System
+
+
+ Objective
+
+To **automatically feed fish at fixed time intervals** in an aquaponic system without human intervention, ensuring uniform feeding and reduced feed wastage.
+
+ Components Involved
+
+* Microcontroller (Arduino / ESP32)
+* Servo motor (for feed dispensing)
+* Real Time Clock (RTC) module **OR** internal timer
+* Power supply
+
+---
+
+## Working Logic (Step-by-Step)
+
+### Step 1: System Initialization
+
+* Initialize microcontroller
+* Set feeding times (e.g., morning and evening)
+* Set servo motor initial position (closed state)
+
+---
+
+### Step 2: Time Monitoring
+
+* Continuously monitor current time using:
+
+  * RTC module **or**
+  * Internal delay/timer function
+
+---
+
+### Step 3: Feeding Condition Check
+
+* Compare current time with predefined feeding time
+
+```
+IF (current time == feeding time)
+    Activate feeder
+ELSE
+    Keep feeder OFF
+```
+
+---
+
+### Step 4: Feed Dispensing
+
+* Rotate servo motor by a fixed angle
+* Feed is released into fish tank
+* Maintain rotation for a fixed duration (e.g., 2–3 seconds)
+
+---
+
+### Step 5: Reset Feeder
+
+* Rotate servo back to original position
+* Stop feeding action
+
+---
+
+### Step 6: Repeat Cycle
+
+* System waits for next feeding time
+* Process repeats automatically
+
+---
+
+## Logic in Simple Pseudocode
+
+```
+Start
+Initialize servo motor
+Set feeding times
+
+Loop:
+   Read current time
+   If time matches feeding time:
+       Rotate servo to open feeder
+       Delay for feed release
+       Rotate servo back to close feeder
+   End if
+End loop
+
+ 
+Optional Safety Logic 
+
+
+If (water level is LOW)
+   Skip feeding
+If (temperature is HIGH)
+   Reduce feeding duration
+
+Key Advantages
+
+* Timely and uniform feeding
+* Reduced manual effort
+* Prevents overfeeding
+* Improves fish health
