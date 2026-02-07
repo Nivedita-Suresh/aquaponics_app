@@ -60,8 +60,7 @@ Based on the calculated pH value, the system classifies the water condition as f
 The system provides real-time feedback by displaying the current pH value and its corresponding status (Normal, Acidic, or Alkaline) on the serial console. Adjusting the potentiometer simulates changes in water pH, enabling easy observation of system response and alert indication during testing and demonstration.
 
 ## Circuit Design
-<img width="735" height="494" alt="pH Monitoring Pinout Diagram" src="https://github.com/user-attachments/assets/9f2c1e84-71a6-4b92-bd6a-2d91a8e4c712" />
-
+<img width="535" height="421" alt="pH pinout diagram" src="https://github.com/user-attachments/assets/14385feb-b558-4073-bbef-767395da7609" />
 
 
 
