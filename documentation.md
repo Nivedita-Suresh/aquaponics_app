@@ -65,3 +65,57 @@ The system provides real-time feedback by displaying the current pH value and it
 
 
 
+
+## Water Temperature Monitoring & Alert Module  
+**Author:** Nikhil H  
+
+---
+
+### Overview  
+The Water Temperature Monitoring & Alert Module is a critical part of the aquaponics automation system. It continuously measures the water temperature in real time to ensure a healthy environment for both fish and plants. Maintaining an optimal temperature range is essential for fish metabolism and efficient nutrient absorption in plants.  
+
+The module also includes an automated alert mechanism that warns the user whenever the temperature exceeds safe limits.
+
+---
+
+### Working Principle  
+This system uses the **DS18B20 digital temperature sensor** interfaced with the **Raspberry Pi Pico**. Unlike analog temperature sensors, the DS18B20 operates using the **1-Wire communication protocol**, enabling accurate digital temperature readings with minimal wiring.
+
+- **Data Acquisition:**  
+  The Pico reads temperature values from the DS18B20 through a single data pin (**GP22**). A **4.7 kΩ pull-up resistor** is used to maintain signal stability and ensure reliable communication.
+
+- **Visual Alert Mechanism:**  
+  An LED is included in the circuit as a **Critical Temperature Indicator**, simulating an automated cooling trigger or manual alarm system.
+
+---
+
+### Control Logic  
+The firmware continuously polls the sensor and compares the temperature against a defined threshold:
+
+- **Normal State:**  
+  If the temperature remains **between 30°C and 25°C**, the system stays in monitoring mode and the Alert LED remains **OFF**.
+
+- **Alert State:**  
+  If the temperature reaches either **above 30°C** or **below 25°C** , the system activates a high-priority warning. The LED turns **ON**, and a warning message is printed to the serial console.
+
+- **Error Handling:**  
+  The code verifies whether the sensor is properly connected. If no ROM address is detected, the system reports a **"Device Disconnected"** error.
+
+---
+
+### Simulation and Output  
+The module is simulated using **Wokwi** with **MicroPython**. Within the simulation:
+
+- The user can manually adjust the DS18B20 temperature value by clicking and sliding the sensor control.
+- The Serial Console displays continuous real-time temperature readings in **degrees Celsius (°C)**.
+- The LED provides immediate visual feedback when the temperature exceeds the critical threshold.
+
+---
+
+### Circuit Design  
+<img width="735" height="494" alt="Screenshot 2026-02-07 164303" src="https://github.com/user-attachments/assets/c642e0e2-8c6f-438f-86a3-2d345c7f8cc8" />
+
+
+
+
+
