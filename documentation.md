@@ -22,7 +22,10 @@ The system provides real-time feedback by printing the current water level and p
 <img width="735" height="494" alt="image" src="https://github.com/user-attachments/assets/ca35723a-9b5a-44d8-8b83-530722cea55d" />
 
 
-#**pH Monitoring Module** 
+
+
+
+# **pH Monitoring Module** 
 
 **Author:** Navya VK
 
