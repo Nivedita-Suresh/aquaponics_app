@@ -1,6 +1,6 @@
 # **Water Level Monitoring & Pump Control Module**
 
-**Author:** NiveditaSuresh 
+**Author:** Nivedita Suresh 
 
 ## Overview
 This module is a component of the aquaponics system and is responsible for automatically monitoring and maintaining the water level. Proper water level control is essential to ensure the health of both plants and fish while preventing overflow or water shortages.
@@ -115,7 +115,40 @@ The module is simulated using **Wokwi** with **MicroPython**. Within the simulat
 ### Circuit Design  
 <img width="735" height="494" alt="Screenshot 2026-02-07 164303" src="https://github.com/user-attachments/assets/c642e0e2-8c6f-438f-86a3-2d345c7f8cc8" />
 
+## Pump Logic
+**Author:** Nivedita Suresh
 
+### Overview
+This aquaponics system uses a **single submersible water pump** to circulate water between the fish tank and the grow beds. The pump is placed inside the fish tank and is responsible for lifting nutrient-rich water to the grow beds, while the return flow to the tank occurs naturally through **gravity-based drainage**. This simple and efficient circulation mechanism ensures continuous nutrient delivery to plants and maintains a healthy aquatic environment for the fish.
+
+### Pump Operation
+For the current small-scale setup (one fish tank with one or two grow beds and a minimal fish load), the pump operates in a **continuous ON mode**. Continuous circulation provides:
+- Stable water levels in the fish tank
+- Consistent nutrient supply to plant roots
+- Improved oxygenation of water
+- Reduced stress on fish due to sudden flow changes
+
+An optional enhancement to this approach is a **timed flood-and-drain cycle**, where the pump operates for a fixed duration (e.g., ON for a few minutes and OFF for a few minutes). This mode can improve root aeration and reduce power consumption, but it is not strictly required for the current system scale.
+
+### Use of a Single Pump
+Only **one pump** is used in the system due to the following reasons:
+- Gravity efficiently returns water from the grow beds back to the fish tank
+- Additional pumps for drainage are unnecessary and increase system complexity
+- A single pump is sufficient to handle the low flow-rate requirements of a small aquaponics setup
+- Fewer components reduce power consumption, cost, and maintenance effort
+
+This design choice improves overall system reliability while keeping the architecture simple and easy to manage.
+
+### Complexity Avoidance and Design Justification
+Advanced aquaponics systems often use multiple pumps, solenoid valves, and closed-loop control based on real-time sensor feedback. However, such complexity was intentionally avoided in this project because:
+- The system operates at a very small scale
+- The risk of overflow or dry-run conditions is minimal
+- Over-automation increases failure points and debugging difficulty
+- Simplicity enhances long-term stability and ease of use
+
+
+### Summary
+The pump logic prioritizes **simplicity, reliability, and energy efficiency**. By using a single continuously operating pump and gravity-assisted drainage, the system achieves effective water circulation without unnecessary complexity. Sensor data is leveraged for monitoring and alerts rather than direct actuation, making the design well-suited for small-scale aquaponics applications and future scalability.
 
 
 
