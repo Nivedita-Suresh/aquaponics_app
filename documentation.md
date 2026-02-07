@@ -47,13 +47,13 @@ An **LED** is used as a visual alert indicator to represent abnormal pH conditio
 
 Based on the calculated pH value, the system classifies the water condition as follows:
 
-When the pH value lies between **6.5** and **8.5**, the pH level is considered **NORMAL**
+-When the pH value lies between **6.5** and **8.5**, the pH level is considered **NORMAL**
 
-When the pH value falls below **6.5**, the water is ACIDIC, and the **LED alert is activated**
+-When the pH value falls below **6.5**, the water is ACIDIC, and the **LED alert is activated**
 
-When the pH value rises above **8.5**, the water is ALKALINE, and the **LED alert is activated**
+-When the pH value rises above **8.5**, the water is ALKALINE, and the **LED alert is activated**
 
-The **LED** blinks to indicate abnormal pH conditions and remains**OFF** when the pH level is within the safe range.
+-The **LED** blinks to indicate abnormal pH conditions and remains **OFF** when the pH level is within the safe range.
 
 ## Simulation and Output
 
