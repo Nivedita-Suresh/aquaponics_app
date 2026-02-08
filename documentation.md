@@ -170,7 +170,7 @@ As a next stage, the integrated sensor data will be sent to a mobile application
 
 To **automatically feed fish at fixed time intervals** in an aquaponic system without human intervention, ensuring uniform feeding and reduced feed wastage.
 
- Components Involved
+ ## Components Involved
 
 * Microcontroller (Arduino / ESP32)
 * Servo motor (for feed dispensing)
@@ -179,7 +179,7 @@ To **automatically feed fish at fixed time intervals** in an aquaponic system wi
 
 ---
 
-## Working Logic (Step-by-Step)
+## Working Logic 
 
 ### Step 1: System Initialization
 
