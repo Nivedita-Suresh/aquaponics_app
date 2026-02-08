@@ -162,7 +162,9 @@ As a next stage, the integrated sensor data will be sent to a mobile application
 <img width="754" height="547" alt="image" src="https://github.com/user-attachments/assets/44a43a8c-f42c-4cd1-b724-08713bcc29f7" />
 
 
- Basic Logic of Automatic Fish Feeding System
+ # **6. Basic Logic of Automatic Fish Feeding System**
+
+ **Author:** Nezrin Shareef
 
  Objective
 
@@ -248,7 +250,7 @@ Loop:
 End loop
 
  
-Optional Safety Logic 
+## Optional Safety Logic 
 
 
 If (water level is LOW)
@@ -256,7 +258,7 @@ If (water level is LOW)
 If (temperature is HIGH)
    Reduce feeding duration
 
-Key Advantages
+## Key Advantages
 
 * Timely and uniform feeding
 * Reduced manual effort
