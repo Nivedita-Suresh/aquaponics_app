@@ -29,6 +29,7 @@ class AquaponicsController {
   double phLevel = 7.1;
   double temperature = 26.0;
   bool isPumpOn = false; // Added missing semicolon here
+  bool autoMode = true; // when true, pump is controlled automatically
   
   List<LogEntry> logs = [];
   List<FlSpot> waterHistory = [];
@@ -53,15 +54,24 @@ class AquaponicsController {
     _timeCounter++;
 
     // 1. Water & Pump Logic
-    if (isPumpOn) waterLevel += 5; else waterLevel -= 1.5;
+    // Pump effect (applies regardless of auto/manual mode)
+    if (isPumpOn) {
+      waterLevel += 5;
+    } else {
+      waterLevel -= 1.5;
+    }
     waterLevel = waterLevel.clamp(0, 100);
 
-    if (waterLevel < 25 && !isPumpOn) {
-      isPumpOn = true;
-      _addLog("Water level low - Pump activated", Colors.orange, Icons.warning_amber_rounded);
-    } else if (waterLevel > 70 && isPumpOn) {
-      isPumpOn = false;
-      _addLog("Target level reached - Pump OFF", Colors.green, Icons.check_circle);    }
+    // Automatic control only when autoMode is enabled
+    if (autoMode) {
+      if (waterLevel < 25 && !isPumpOn) {
+        isPumpOn = true;
+        _addLog("Water level low - Pump activated (auto)", Colors.orange, Icons.warning_amber_rounded);
+      } else if (waterLevel > 70 && isPumpOn) {
+        isPumpOn = false;
+        _addLog("Target level reached - Pump OFF (auto)", Colors.green, Icons.check_circle);
+      }
+    }
 
     // 2. pH Logic
     phLevel = 6.2 + Random().nextDouble() * 1.8;
@@ -105,6 +115,19 @@ class AquaponicsController {
     }
   }
 
+  /// Enable/disable automatic pump control
+  void setAutoMode(bool enabled) {
+    autoMode = enabled;
+    _addLog('Pump auto mode ${enabled ? 'enabled' : 'disabled'}', Colors.blue, Icons.settings);
+  }
+
+  /// Manually set pump state when autoMode is disabled
+  void setPumpManual(bool on) {
+    if (autoMode) return; // ignore manual changes while auto mode is on
+    isPumpOn = on;
+    _addLog('Pump manually ${on ? 'activated' : 'deactivated'}', Colors.orange, on ? Icons.power : Icons.power_off);
+  }
+
   Map<String, dynamic> getPhStatus() {
     if (phLevel >= 6.8 && phLevel <= 7.2) return {'text': 'Optimal', 'color': Colors.green};
     if (phLevel >= 6.5 && phLevel <= 7.5) return {'text': 'Balanced', 'color': Colors.orange};
@@ -121,8 +144,10 @@ class AquaponicsController {
 // --- UI SECTION ---
 
 class AquaponicsDashboard extends StatefulWidget {
+  const AquaponicsDashboard({super.key});
+
   @override
-  _AquaponicsDashboardState createState() => _AquaponicsDashboardState();
+  State<AquaponicsDashboard> createState() => _AquaponicsDashboardState();
 }
 
 class _AquaponicsDashboardState extends State<AquaponicsDashboard> {
@@ -178,7 +203,7 @@ class _AquaponicsDashboardState extends State<AquaponicsDashboard> {
               decoration: _cardDecoration(),
               child: Row(
                 children: [
-                  Expanded(child: _buildToggleTile("Pump Status", controller.isPumpOn)),
+                  Expanded(child: _buildToggleTile("Pump Status", controller.isPumpOn, controller.autoMode)),
                   Container(width: 1, height: 40, color: Colors.grey[200]),
                   Expanded(child: _buildPhAlertTile(ph['text'] == "Out of Range")),
                 ],
@@ -237,7 +262,7 @@ class _AquaponicsDashboardState extends State<AquaponicsDashboard> {
     );
   }
 
-  Widget _buildToggleTile(String title, bool val) {
+  Widget _buildToggleTile(String title, bool isPumpOn, bool autoMode) {
     return Column(
       children: [
         Text(title, style: TextStyle(fontSize: 12, color: Colors.grey)),
@@ -245,7 +270,25 @@ class _AquaponicsDashboardState extends State<AquaponicsDashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Auto Mode: ", style: TextStyle(fontSize: 11)),
-            Switch(value: val, onChanged: null, activeColor: Colors.green),          ],
+            Switch(
+              value: autoMode,
+              onChanged: (v) => setState(() => controller.setAutoMode(v)),
+              activeThumbColor: Colors.green,
+            ),
+          ],
+        ),
+        SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Pump: ", style: TextStyle(fontSize: 11)),
+            SizedBox(width: 6),
+            ElevatedButton(
+              onPressed: autoMode ? null : () => setState(() => controller.setPumpManual(!isPumpOn)),
+              style: ElevatedButton.styleFrom(backgroundColor: isPumpOn ? Colors.green : Colors.grey),
+              child: Row(children: [Icon(isPumpOn ? Icons.power : Icons.power_off, size: 16), SizedBox(width: 6), Text(isPumpOn ? 'ON' : 'OFF')]),
+            ),
+          ],
         )
       ],
     );
@@ -280,29 +323,104 @@ class _AquaponicsDashboardState extends State<AquaponicsDashboard> {
   }
 
   Widget _buildGraph() {
-    return LineChart(
-      LineChartData(
-        gridData: FlGridData(show: true, drawVerticalLine: false, horizontalInterval: 20),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: controller.waterHistory,
-            isCurved: true,
-            color: Colors.green,            barWidth: 3,
-            dotData: FlDotData(show: false),
-            belowBarData: BarAreaData(show: true, color: Colors.green.withOpacity(0.1)),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Legend
+        Row(
+          children: [
+            Container(width: 10, height: 10, decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
+            SizedBox(width: 6),
+            Text('Water Level', style: TextStyle(fontSize: 12)),
+            SizedBox(width: 16),
+            Container(width: 10, height: 10, decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle)),
+            SizedBox(width: 6),
+            Text('pH Level', style: TextStyle(fontSize: 12)),
+          ],
+        ),
+        SizedBox(height: 8),
+        SizedBox(
+          height: 160,
+          child: LineChart(
+            LineChartData(
+              lineTouchData: LineTouchData(
+                enabled: true,
+                touchTooltipData: LineTouchTooltipData(
+                  tooltipBgColor: Colors.grey[800],
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      final text = spot.barIndex == 0 ? '${spot.y.toInt()}%' : (spot.y / 10).toStringAsFixed(1);
+                      return LineTooltipItem(text, TextStyle(color: Colors.white, fontSize: 12));
+                    }).toList();
+                  },
+                ),
+              ),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: true,
+                horizontalInterval: 20,
+                verticalInterval: 6,
+                getDrawingHorizontalLine: (value) => FlLine(color: Colors.grey.withAlpha(50), strokeWidth: 1),
+                getDrawingVerticalLine: (value) => FlLine(color: Colors.grey.withAlpha(40), strokeWidth: 1),
+              ),
+              titlesData: FlTitlesData(
+                show: true,
+                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    interval: 20,
+                    reservedSize: 40,
+                    getTitlesWidget: (value, meta) {
+                      return Text(value.toInt().toString(), style: TextStyle(color: Colors.grey[700], fontSize: 10));
+                    },
+                  ),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    interval: 6,
+                    reservedSize: 30,
+                    getTitlesWidget: (value, meta) {
+                      final intVal = value.toInt();
+                      // simple numeric x-axis labels — adjust as needed
+                      return Text(intVal.toString(), style: TextStyle(color: Colors.grey[700], fontSize: 10));
+                    },
+                  ),
+                  axisNameWidget: Padding(
+                    padding: const EdgeInsets.only(top: 6.0),
+                    child: Text('Time', style: TextStyle(color: Colors.grey[800], fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                  axisNameSize: 20,
+                ),
+              ),
+              borderData: FlBorderData(show: false),
+              minY: 0,
+              maxY: 100,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: controller.waterHistory,
+                  isCurved: true,
+                  color: Colors.green,
+                  barWidth: 3,
+                  dotData: FlDotData(show: false),
+                  belowBarData: BarAreaData(show: true, color: Colors.green.withAlpha(26)),
+                ),
+                LineChartBarData(
+                  spots: controller.phHistory,
+                  isCurved: true,
+                  color: Colors.blue,
+                  barWidth: 3,
+                  dotData: FlDotData(show: false),
+                  belowBarData: BarAreaData(show: true, color: Colors.blue.withAlpha(26)),
+                ),
+              ],
+            ),
           ),
-          LineChartBarData(
-            spots: controller.phHistory,
-            isCurved: true,
-            color: Colors.blue,
-            barWidth: 3,
-            dotData: FlDotData(show: false),
-            belowBarData: BarAreaData(show: true, color: Colors.blue.withOpacity(0.1)),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -316,7 +434,7 @@ class _AquaponicsDashboardState extends State<AquaponicsDashboard> {
   BoxDecoration _cardDecoration() => BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(12),
-    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: Offset(0, 4))],
+    boxShadow: [BoxShadow(color: Colors.black.withAlpha(8), blurRadius: 10, offset: Offset(0, 4))],
   );
 
   @override
